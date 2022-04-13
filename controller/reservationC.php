@@ -43,15 +43,14 @@
 				echo 'Erreur: '.$e->getMessage();
 			}			
 		}
-		function recupererreservation($Idreservation,$type){
-			$sql="SELECT * from reservation where $type=$Idreservation";
+		function recupererreservation($value,$type){
+			$sql="SELECT * from reservation where $type=$value";
 			$db = config::getConnexion();
 			try{
-				$query=$db->prepare($sql);
-				$query->execute();
-
-				$reservation=$query->fetch();
-				return $reservation;
+				
+				$liste = $db->query($sql);
+				return $liste;
+				
 			}
 			catch (Exception $e){
 				die('Erreur: '.$e->getMessage());

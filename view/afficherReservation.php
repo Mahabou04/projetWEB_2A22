@@ -2,6 +2,26 @@
 	include '../controller/reservationC.php';
 	$reservationC=new reservationC();
 	$listereservations=$reservationC->afficherreservations(); 
+    
+    if(isset($_POST["recherche"]) && isset($_GET["recherche"]))
+    {
+        if(!empty($_POST["recherche"]) && !empty($_GET["recherche"]) )
+            {
+            
+                
+                $listereservations=$reservationC->recupererreservation($_POST["recherche"],$_GET["recherche"]);
+                if(empty($listereservations)){
+                    $listereservations=$reservationC->afficherreservations();  
+                }
+                
+            }
+            else
+            $listereservations=$reservationC->afficherreservations();
+                
+              
+        
+    }
+    
 ?>
 <html lang="en">
 
@@ -76,22 +96,53 @@
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
+                        
                     </form>
+                    <div class="dropdown mb-2">
+                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <?php 
+                                            if(isset($_GET["recherche"]))
+                                            {
+                                                echo "Recherche par ".$_GET['recherche'];
+                                            }
+                                            else {
+                                                echo "Recherche par";
+                                            }
+                                           
+                                            ?>
+                                        </button>
+                                        <div class="dropdown-menu animated--fade-in"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id"; ?>" >id</a>
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id_user"; ?>" >id_user</a>
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id_hotel"; ?>" >id_hotel</a>
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "duree"; ?>" >duree</a>
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "nbr"; ?>" >nbr</a>
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "date"; ?>" >date</a>
+                                        </div>
+                                    </div>
 
                     <!-- Topbar Search -->
+                    
                     <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="POST">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="number" class="form-control bg-light border-0 small" placeholder="rechercher..."
+                               name="recherche" aria-label="Search" aria-describedby="basic-addon2">
+                                
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                                <input class="btn btn-primary" type="submit" value="Rechercher" >
+                                    
+                                
+                               
                             </div>
+                            
                         </div>
+                       
                     </form>
-
+                        
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -101,9 +152,9 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
-                         
+</ul>
 
-                      
+                           
                           
                        
 

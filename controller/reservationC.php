@@ -43,13 +43,49 @@
 				echo 'Erreur: '.$e->getMessage();
 			}			
 		}
-		function recupererreservation($value,$type){
+		function recupererAvecDateOuTemps($value,$type){
+			if($type=='temps'){
+				$sql="SELECT * FROM reservation WHERE TIME(date)='$value'";;
+			}else{
+				$sql="SELECT * FROM reservation WHERE DATE(date)='$value'";
+			}
+			
+			$db = config::getConnexion();
+			try{
+				
+				$liste = $db->query($sql);
+				return $liste;
+				
+			}
+			catch (Exception $e){
+				die('Erreur: '.$e->getMessage());
+			}
+		}
+
+		function filtrereservation($value,$type){
+			if($type=='date'){$value="'$value'";}
 			$sql="SELECT * from reservation where $type=$value";
 			$db = config::getConnexion();
 			try{
 				
 				$liste = $db->query($sql);
 				return $liste;
+			}
+			catch (Exception $e){	
+				die('Erreur:'. $e->getMeesage());
+			}
+				
+			}
+		function recupererreservation($value,$type){
+			$sql="SELECT * from reservation where $type=$value";
+			$db = config::getConnexion();
+			try{
+				
+				$query=$db->prepare($sql);
+				$query->execute();
+
+				$reservation=$query->fetch();
+				return $reservation;
 				
 			}
 			catch (Exception $e){

@@ -41,6 +41,19 @@
 				echo 'Erreur: '.$e->getMessage();
 			}			
 		}
+		function filtreticket($value,$type){
+			$sql="SELECT * from ticket where $type=$value";
+			$db = config::getConnexion();
+			try{
+				
+				$liste = $db->query($sql);
+				return $liste;
+			}
+			catch (Exception $e){	
+				die('Erreur:'. $e->getMeesage());
+			}
+				
+			}
 		function recupererticket($Idticket,$type){
 			$sql="SELECT * from ticket where $type=$Idticket";
 			$db = config::getConnexion();

@@ -9,9 +9,9 @@
             {
             
                 
-                $listereservations=$reservationC->recupererreservation($_POST["recherche"],$_GET["recherche"]);
+                $listereservations=$reservationC->filtrereservation($_POST["recherche"],$_GET["recherche"]);
                 if(empty($listereservations)){
-                    $listereservations=$reservationC->afficherreservations();  
+                    $listereservations=[];  
                 }
                 
             }
@@ -20,6 +20,29 @@
                 
               
         
+    } 
+    else if(isset($_POST["rechercheDate"]) && isset($_POST["rechercheTemps"]) &&  isset($_GET["recherche"])){
+        if(!empty($_POST["rechercheDate"]) && !empty($_POST["rechercheTemps"]) && isset($_GET["recherche"])){
+            $listereservations=$reservationC->filtrereservation($_POST["rechercheDate"]. ' ' .$_POST["rechercheTemps"],$_GET["recherche"]);
+            if(empty($listereservations)){
+                $listereservations=[];  
+            }
+        }
+        else if(!empty($_POST["rechercheDate"]) && isset($_GET["recherche"])){
+            $listereservations=$reservationC->recupererAvecDateOuTemps($_POST["rechercheDate"],$_GET["recherche"]);
+            if(empty($listereservations)){
+                $listereservations=[];  
+            }
+        }
+        elseif(!empty($_POST["rechercheTemps"]) && isset($_GET["recherche"])){
+            $listereservations=$reservationC->recupererAvecDateOuTemps($_POST["rechercheTemps"],'temps');
+            if(empty($listereservations)){
+                $listereservations=[];  
+            } 
+        }
+        else
+        $listereservations=$reservationC->afficherreservations();
+
     }
     
 ?>
@@ -55,7 +78,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" >
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -129,9 +152,17 @@
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="POST">
                         <div class="input-group">
-                            <input type="number" class="form-control bg-light border-0 small" placeholder="rechercher..."
-                               name="recherche" aria-label="Search" aria-describedby="basic-addon2">
-                                
+                            <?php 
+                            if(isset($_GET['recherche']) && $_GET['recherche']=="date"){
+                                echo '<input type="date" class="form-control bg-light border-0 small" 
+                                name="rechercheDate" aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="time" class="form-control bg-light border-0 small" 
+                                name="rechercheTemps" aria-label="Search" aria-describedby="basic-addon2">';
+                            }
+                            else 
+                            echo '<input type="number" class="form-control bg-light border-0 small" placeholder="Rechercher..."
+                               name="recherche" aria-label="Search" aria-describedby="basic-addon2">';
+                                ?>
                             <div class="input-group-append">
                                 <input class="btn btn-primary" type="submit" value="Rechercher" >
                                     

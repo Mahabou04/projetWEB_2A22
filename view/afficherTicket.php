@@ -2,6 +2,24 @@
 	include '../controller/ticketC.php';
 	$ticketC=new ticketC();
 	$listetickets=$ticketC->affichertickets(); 
+    if(isset($_POST["recherche"]) && isset($_GET["recherche"]))
+    {
+        if(!empty($_POST["recherche"]) && !empty($_GET["recherche"]) )
+            {
+            
+                
+                $listetickets=$ticketC->filtreticket($_POST["recherche"],$_GET["recherche"]);
+                if(empty($listetickets)){
+                    $listetickets=[];  
+                }
+                
+            }
+            else
+            $listetickets=$ticketC->affichertickets();
+                
+              
+        
+    } 
 ?>
 <html lang="en">
 
@@ -35,7 +53,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" >
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -49,7 +67,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="afficherReservation.php" >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span> reservation</span></a>
+                    <span> Reservation</span></a>
             </li>
              <!-- Nav Item - ticket -->
              <li class="nav-item">
@@ -77,17 +95,39 @@
                             <i class="fa fa-bars"></i>
                         </button>
                     </form>
+                    <div class="dropdown mb-2">
+                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <?php 
+                                            if(isset($_GET["recherche"]))
+                                            {
+                                                echo "Recherche par ".$_GET['recherche'];
+                                            }
+                                            else {
+                                                echo "Recherche par";
+                                            }
+                                           
+                                            ?>
+                                        </button>
+                                        <div class="dropdown-menu animated--fade-in"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="afficherTicket.php?recherche=<?php echo "id"; ?>" >id</a>
+                                            <a class="dropdown-item" href="afficherTicket.php?recherche=<?php echo "id_reservation"; ?>" >id_reservation</a>
+                                            <a class="dropdown-item" href="afficherTicket.php?recherche=<?php echo "prix"; ?>" >prix</a>  
+                                        </div>
+                                    </div>
 
                     <!-- Topbar Search -->
                     <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search " method='POST'>
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..."
+                               name="recherche" aria-label="Search" aria-describedby="basic-addon2">
+                               <div class="input-group-append">
+                                <input class="btn btn-primary" type="submit" value="Rechercher" >
+                                
+                               
                             </div>
                         </div>
                     </form>
@@ -126,7 +166,7 @@
                                 <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Id_reservation</th>
+                                            <th>Id_Ticket</th>
                                             <th>prix</th>
                                         </tr>
                                 </thead>

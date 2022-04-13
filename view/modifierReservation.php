@@ -73,7 +73,7 @@
         
 		<?php
 			if (isset($_GET['id'])){
-				$reservation = $reservationC->recupererreservation($_GET['id'],"id");
+				$reservation = $reservationC->recupererreservation($_GET['id'],'id');
             }
 				
 		?>

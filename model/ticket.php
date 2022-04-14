@@ -4,7 +4,6 @@
 		private $prix=null;
 		
 		
-		private $password=null;
 		function __construct( $id_reservation, $prix){		
 			$this->id_reservation=$id_reservation;
 			$this->prix=$prix;

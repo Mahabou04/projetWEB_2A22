@@ -26,19 +26,34 @@
 			}
 		}
 		function ajouterticket($ticket){
+			$id=$ticket->getid_reservation();
+			$sqlr="SELECT * from reservation where id='$id'";
 			$sql="INSERT INTO ticket ( id_reservation,prix)
 			VALUES (:id_reservation,:prix)";
 			$db = config::getConnexion();
 			try{
-				$query = $db->prepare($sql);
-				$query->execute([
-					'id_reservation' => $ticket-> getid_reservation(),
+				$liste=$db->query($sqlr);
+				if($liste){
+					foreach($liste as $keys ){
+
+					if($keys['id']==$id){
+				$query1 = $db->prepare($sql);
+				$query1->execute([
+					'id_reservation' => $ticket->getid_reservation(),
 					'prix' => $ticket->getprix()
 					
-				]);			
+				]);	
+				return $liste;
+				}
+			}
+		}
+				
+					
+				  
+			
 			}
 			catch (Exception $e){
-				echo 'Erreur: '.$e->getMessage();
+				echo 'Erreur: '.$e->getMeessage();
 			}			
 		}
 		function filtreticket($value,$type){

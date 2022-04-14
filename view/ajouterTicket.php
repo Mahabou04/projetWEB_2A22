@@ -1,12 +1,13 @@
 <?php
     include_once '../Model/ticket.php';
     include_once '../Controller/ticketC.php';
-
+    
     $error = "";
 
     // create ticket
     $ticket = null;
     $message=null;
+    $ajout=[];
     // create an instance of the controller
     $ticketC = new ticketC();
     if (
@@ -19,18 +20,35 @@
             !empty($_POST["prix"]) 
 			
         ) {
-            
             $ticket = new ticket(
 				$_POST['id_reservation'],
                 $_POST['prix']
             );
-            $ticketC->ajouterticket($ticket);
-            header('Location:afficherticket.php');
+            $ajout=$ticketC->ajouterticket($ticket);
+            if($ajout){
+                header('Location:afficherticket.php');
+            //     foreach($ajout as $keys ){
+   
+            //     if(isset($keys['id'])){
+            //         header('Location:afficherticket.php');
+            // }
+           
+        
+        
         }
         else
-            $error = "Missing information";
-          
+        $error = "Reservation existe pas";
     }
+        
+       
+            
+           
+            else
+            $error = "Missing information";
+        }
+     
+          
+    
 
     
 ?>
@@ -73,6 +91,9 @@
                             </div>
                             <div class="form-group row">
                             <div id="error">
+                            <div>
+                              
+</div>
                         <?php echo $error; ?>
                         </div>
                         </div>

@@ -166,7 +166,7 @@
                                 <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Id_Ticket</th>
+                                            <th>Id_reservation</th>
                                             <th>prix</th>
                                         </tr>
                                 </thead>

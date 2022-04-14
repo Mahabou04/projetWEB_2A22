@@ -27,11 +27,7 @@
             $ajout=$ticketC->ajouterticket($ticket);
             if($ajout){
                 header('Location:afficherticket.php');
-            //     foreach($ajout as $keys ){
-   
-            //     if(isset($keys['id'])){
-            //         header('Location:afficherticket.php');
-            // }
+          
            
         
         

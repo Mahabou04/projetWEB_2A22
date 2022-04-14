@@ -100,6 +100,12 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>ticket</span></a>
             </li>
+             <!-- Nav Item - ticket -->
+             <li class="nav-item">
+                <a class="nav-link" href="afficherStatistique.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Statistique</span></a>
+            </li>
 
 
         </ul>

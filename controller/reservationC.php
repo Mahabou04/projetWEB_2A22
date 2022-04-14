@@ -2,6 +2,17 @@
 	include '../config.php';
 	include_once '../model/reservation.php';
 	class reservationC {
+		function statistiquereservations(){
+			$sql="SELECT id_hotel,(SELECT sum(prix) from ticket where id_reservation=reservation.id) as prix FROM reservation";
+			$db = config::getConnexion();
+			try{
+				$liste = $db->query($sql);
+				return $liste;
+			}
+			catch(Exception $e){
+				die('Erreur:'. $e->getMeesage());
+			}
+		}
 		function afficherreservations(){
 			$sql="SELECT * FROM reservation";
 			$db = config::getConnexion();

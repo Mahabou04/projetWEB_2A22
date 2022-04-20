@@ -2,16 +2,16 @@
 	class Reservation{
 		
 		private $id_user=null;
-		private $id_hotel=null;
+		private $nom_hotel=null;
 		private $duree=null;
 		private $nbr=null;
 		private $date;
 		
 		private $password=null;
-		function __construct( $id_user, $id_hotel, $duree, $nbr, $date){
+		function __construct( $id_user, $nom_hotel, $duree, $nbr, $date){
 			
 			$this->id_user=$id_user;
-			$this->id_hotel=$id_hotel;
+			$this->nom_hotel=$nom_hotel;
 			$this->duree=$duree;
 			$this->nbr=$nbr;
 			$this->date=$date;
@@ -20,8 +20,8 @@
 		function getid_user(){
 			return $this->id_user;
 		}
-		function getid_hotel(){
-			return $this->id_hotel;
+		function getnom_hotel(){
+			return $this->nom_hotel;
 		}
 		function getduree(){
 			return $this->duree;
@@ -35,8 +35,8 @@
 		function setid_user(string $id_user){
 			$this->id_user=$id_user;
 		}
-		function setid_hotel(string $id_hotel){
-			$this->id_hotel=$id_hotel;
+		function setnom_hotel(string $nom_hotel){
+			$this->nom_hotel=$nom_hotel;
 		}
 		function setduree(string $duree){
 			$this->duree=$duree;

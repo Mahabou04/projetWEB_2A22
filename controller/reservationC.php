@@ -3,7 +3,7 @@
 	include_once '../model/reservation.php';
 	class reservationC {
 		function statistiquereservations(){
-			$sql="SELECT id_hotel,(SELECT sum(prix) from ticket where id_reservation=reservation.id) as prix FROM reservation";
+			$sql="SELECT r.nom_hotel,sum(prix) as prix FROM ticket t INNER JOIN reservation r ON r.id = t.id_reservation GROUP BY nom_hotel;";
 			$db = config::getConnexion();
 			try{
 				$liste = $db->query($sql);
@@ -25,11 +25,15 @@
 			}
 		}
 		function supprimerreservation($Idreservation){
+			$sqlcheck="DELETE FROM ticket WHERE id_reservation=:id";
 			$sql="DELETE FROM reservation WHERE id=:id";
 			$db = config::getConnexion();
+			$reqcheck=$db->prepare($sqlcheck);
 			$req=$db->prepare($sql);
+			$reqcheck->bindValue(':id', $Idreservation);
 			$req->bindValue(':id', $Idreservation);
 			try{
+				$reqcheck->execute();
 				$req->execute();
 			}
 			catch(Exception $e){
@@ -37,14 +41,14 @@
 			}
 		}
 		function ajouterreservation($reservation){
-			$sql="INSERT INTO reservation ( id_user, id_hotel, duree, nbr, date)
-			VALUES (:id_user,:id_hotel, :duree,:nbr, :dates )";
+			$sql="INSERT INTO reservation ( id_user, nom_hotel, duree, nbr, date)
+			VALUES (:id_user,:nom_hotel, :duree,:nbr, :dates )";
 			$db = config::getConnexion();
 			try{
 				$query = $db->prepare($sql);
 				$query->execute([
 					'id_user' => $reservation->getid_user(),
-					'id_hotel' => $reservation->getid_hotel(),
+					'nom_hotel' => $reservation->getnom_hotel(),
 					'duree' => $reservation->getduree(),
 					'nbr' => $reservation->getnbr(),
 					'dates' => $reservation->getdate()
@@ -110,7 +114,7 @@
 				$query = $db->prepare(
 					'UPDATE reservation SET 
 						id_user= :id_user, 
-						id_hotel= :id_hotel, 
+						nom_hotel= :nom_hotel, 
 						duree= :duree, 
 						nbr= :nbr, 
 						date = :dates
@@ -118,7 +122,7 @@
 				);
 				$query->execute([
 					'id' => $id,
-					'id_hotel' => $reservation->getid_hotel(),
+					'nom_hotel' => $reservation->getnom_hotel(),
 					'duree' => $reservation->getduree(),
 					'nbr' => $reservation->getnbr(),
 					'dates' => $reservation->getdate(),

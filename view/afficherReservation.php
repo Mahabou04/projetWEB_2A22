@@ -92,13 +92,13 @@
             <li class="nav-item">
                 <a class="nav-link" >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span> reservation</span></a>
+                    <span> Reservation</span></a>
             </li>
              <!-- Nav Item - ticket -->
              <li class="nav-item">
                 <a class="nav-link" href="afficherticket.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>ticket</span></a>
+                    <span>Ticket</span></a>
             </li>
              <!-- Nav Item - ticket -->
              <li class="nav-item">
@@ -215,7 +215,7 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Id_user</th>
-                                            <th>Id_hotel</th>
+                                            <th>Nom_hotel</th>
                                             <th>duree(mois)</th>
                                             <th>nombre de personne</th>
                                             <th>date</th>
@@ -227,7 +227,7 @@
 			<tr>
 				<td><?php echo $reservation['id']; ?></td>
 				<td><?php echo $reservation['id_user']; ?></td>
-				<td><?php echo $reservation['id_hotel']; ?></td>
+				<td><?php echo $reservation['nom_hotel']; ?></td>
 				<td><?php echo $reservation['duree']; ?></td>
 				<td><?php echo $reservation['nbr']; ?></td>
 				<td><?php echo $reservation['date']; ?></td>

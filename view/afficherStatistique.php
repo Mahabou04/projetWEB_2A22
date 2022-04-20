@@ -5,7 +5,7 @@
     $hotel="";
     $prix="";
     foreach($liste as $keys){
-        $hotel.=$keys['id_hotel'].'/';
+        $hotel.=$keys['nom_hotel'].'/';
         $prix.=$keys['prix'].'/';
     }
 ?>
@@ -51,19 +51,19 @@
 
 <!-- Nav Item - reservation -->
 <li class="nav-item">
-    <a class="nav-link" >
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span> reservation</span></a>
+    <a class="nav-link" href="afficherReservation.php">
+        <i class="fas fa-fw fa-tachometer-alt "  ></i>
+        <span> Reservation</span></a>
 </li>
  <!-- Nav Item - ticket -->
  <li class="nav-item">
     <a class="nav-link" href="afficherticket.php">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>ticket</span></a>
+        <span>Ticket</span></a>
 </li>
  <!-- Nav Item - ticket -->
  <li class="nav-item">
-    <a class="nav-link" href="afficherStatistique.php">
+    <a class="nav-link">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Statistique</span></a>
 </li>

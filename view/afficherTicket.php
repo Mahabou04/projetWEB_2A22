@@ -73,7 +73,7 @@
              <li class="nav-item">
                 <a class="nav-link" >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>ticket</span></a>
+                    <span>Ticket</span></a>
             </li>
             <!-- Nav Item - ticket -->
             <li class="nav-item">

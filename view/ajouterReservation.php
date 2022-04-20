@@ -11,7 +11,7 @@
     $reservationC = new reservationC();
     if (
 		isset($_POST["id_user"]) &&		
-        isset($_POST["id_hotel"]) &&
+        isset($_POST["nom_hotel"]) &&
 		isset($_POST["duree"]) && 
         isset($_POST["nbr"]) && 
         isset($_POST["date"]) &&
@@ -19,7 +19,7 @@
     ) {
         if (
 			!empty($_POST['id_user']) &&
-            !empty($_POST["id_hotel"]) && 
+            !empty($_POST["nom_hotel"]) && 
 			!empty($_POST["duree"]) && 
             !empty($_POST["nbr"]) && 
             !empty($_POST["date"]) &&
@@ -28,7 +28,7 @@
             
             $reservation = new Reservation(
 				$_POST['id_user'],
-                $_POST['id_hotel'], 
+                $_POST['nom_hotel'], 
 				$_POST['duree'],
                 $_POST['nbr'],
                 $_POST['date'] . " " . $_POST['temps']
@@ -94,9 +94,9 @@
                                             onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="number" class="form-control form-control-user" id="id_hotel"
-                                       name="id_hotel"  placeholder="Id_hotel" max="999"
-                                       onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"
+                                        <input type="text" class="form-control form-control-user" id="nom_hotel"
+                                       name="nom_hotel"  placeholder="nom_hotel" max="999"
+                                       
                                        >
                                     </div>
                                 </div>

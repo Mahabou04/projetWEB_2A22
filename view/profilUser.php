@@ -9,7 +9,7 @@ else{
     $session=gzinflate($_SESSION['key']);
     $res=json_decode($session,true);
     $reservationC=new reservationC();
-    $listereservations=$reservationC->filtrereservation($res['id'],'id_user');
+    $listereservations=$reservationC->Userreservation($res['id']);
 }
 
 ?>
@@ -151,12 +151,16 @@ else{
                             <img class="img-fluid" src="../assets/images/services-1.jpg" alt="alternative">
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title">Nom Hotel: <?php echo $reservation['nom_hotel']; ?></h3>
+                            <h3 class="card-title">Voyage a: <?php echo $reservation['arrive']; ?></h3>
                             <p> Date : <?php echo $reservation['date']; ?> </p>
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
                                     <i class="fas fa-square"></i>
-                                    <div class="media-body">Duree(mois) : <?php echo $reservation['duree']; ?> </div>
+                                    <div class="media-body">Nom Hotel: <?php echo $reservation['nom_hotel']; ?> </div>
+                                </li>
+                                <li class="media">
+                                    <i class="fas fa-square"></i>
+                                    <div class="media-body">Prix: <?php echo $reservation['prix']; ?> </div>
                                 </li>
                                 <li class="media">
                                     <i class="fas fa-square"></i>

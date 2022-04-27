@@ -11,25 +11,22 @@
     $reservationC = new reservationC();
     if (
 		isset($_POST["id_user"]) &&		
-        isset($_POST["nom_hotel"]) &&
-		isset($_POST["duree"]) && 
+		isset($_POST["id_destination"]) && 
         isset($_POST["nbr"]) && 
         isset($_POST["date"]) &&
         isset($_POST["temps"])
     ) {
         if (
 			!empty($_POST['id_user']) &&
-            !empty($_POST["nom_hotel"]) && 
-			!empty($_POST["duree"]) && 
+			!empty($_POST["id_destination"]) && 
             !empty($_POST["nbr"]) && 
             !empty($_POST["date"]) &&
             !empty($_POST["temps"])
         ) {
             
             $reservation = new Reservation(
-				$_POST['id_user'],
-                $_POST['nom_hotel'], 
-				$_POST['duree'],
+				$_POST['id_user'], 
+				$_POST['id_destination'],
                 $_POST['nbr'],
                 $_POST['date'] . " " . $_POST['temps']
             );
@@ -88,27 +85,25 @@
                         </div>
                             <form class="user" method="POST">
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <div class="col-sm-6">
                                         <input type="number" class="form-control form-control-user" name="id_user" id="id_user"
                                             placeholder="Id_user" max="999" 
                                             onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
                                     </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="nom_hotel"
-                                       name="nom_hotel"  placeholder="nom_hotel" max="999"
-                                       
-                                       >
-                                    </div>
+                                   
                                 </div>
                                
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="number" class="form-control form-control-user"
-                                        name="duree"   id="duree" placeholder="Duree(mois)" max="12" 
+                                        name="id_destination"   id="id_destination" placeholder="Id_destination" max="12" 
                                         onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"
                                         >
                                     </div>
-                                    <div class="col-sm-6">
+                                   
+                                </div>
+                                <div class="form-group row">
+                                <div class="col-sm-6">
                                         <input type="number" class="form-control form-control-user"
                                        name="nbr" id="nbr" placeholder="Nombre de personnes" max="10"
                                        onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"

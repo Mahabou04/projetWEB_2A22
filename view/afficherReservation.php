@@ -96,9 +96,9 @@
             </li>
              <!-- Nav Item - ticket -->
              <li class="nav-item">
-                <a class="nav-link" href="afficherticket.php">
+                <a class="nav-link" href="afficherDestination.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Ticket</span></a>
+                    <span>Destination</span></a>
             </li>
              <!-- Nav Item - ticket -->
              <li class="nav-item">
@@ -146,8 +146,7 @@
                                             aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id"; ?>" >id</a>
                                             <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id_user"; ?>" >id_user</a>
-                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id_hotel"; ?>" >id_hotel</a>
-                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "duree"; ?>" >duree</a>
+                                            <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "id_destination"; ?>" >id_destination</a>
                                             <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "nbr"; ?>" >nbr</a>
                                             <a class="dropdown-item" href="afficherReservation.php?recherche=<?php echo "date"; ?>" >date</a>
                                         </div>
@@ -215,8 +214,7 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Id_user</th>
-                                            <th>Nom_hotel</th>
-                                            <th>duree(mois)</th>
+                                            <th>id_destination</th>
                                             <th>nombre de personne</th>
                                             <th>date</th>
                                         </tr>
@@ -227,16 +225,10 @@
 			<tr>
 				<td><?php echo $reservation['id']; ?></td>
 				<td><?php echo $reservation['id_user']; ?></td>
-				<td><?php echo $reservation['nom_hotel']; ?></td>
-				<td><?php echo $reservation['duree']; ?></td>
+				<td><?php echo $reservation['id_destination']; ?></td>
 				<td><?php echo $reservation['nbr']; ?></td>
 				<td><?php echo $reservation['date']; ?></td>
-				<td>
-                <a href="modifierReservation.php?id=<?php echo $reservation['id']; ?>">Modifier</a>
-				</td>
-				<td>
-					<a href="supprimerReservation.php?id=<?php echo $reservation['id']; ?>">Supprimer</a>
-				</td>
+				
 			</tr>
 			<?php
 				}
@@ -246,9 +238,9 @@
                             </div>
                         </div>
                     </div>
-                    <a href="http://localhost/projetWEB_2A22/view/ajouterReservation.php" class="btn btn-primary ">
+                    <!-- <a href="http://localhost/projetWEB_2A22/view/ajouterReservation.php" class="btn btn-primary ">
                                     Ajouter reservation
-</a>
+</a> -->
                 </div>
                 <!-- /.container-fluid -->
                

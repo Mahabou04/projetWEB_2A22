@@ -11,49 +11,18 @@ else{
 
 ?>
 <?php 
- include_once '../Model/reservation.php';
- include_once '../Controller/reservationC.php';
+ include_once '../Model/destination.php';
+ include_once '../Controller/destinationC.php';
 
  $error = "";
 
- // create reservation
- $reservation = null;
+ // create destination
+ $destination = null;
  $message=null;
  // create an instance of the controller
- $reservationC = new reservationC();
- if (
-     isset($res['id']) &&		
-     isset($_POST["nom_hotel"]) &&
-     isset($_POST["duree"]) && 
-     isset($_POST["nbr"]) && 
-     isset($_POST["date"]) &&
-     isset($_POST["temps"])
- ) {
-     if (
-         !empty($res['id']) &&
-         !empty($_POST["nom_hotel"]) && 
-         !empty($_POST["duree"]) && 
-         !empty($_POST["nbr"]) && 
-         !empty($_POST["date"]) &&
-         !empty($_POST["temps"])
-     ) {
-         
-         $reservation = new Reservation(
-             $res['id'],
-             $_POST['nom_hotel'], 
-             $_POST['duree'],
-             $_POST['nbr'],
-             $_POST['date'] . " " . $_POST['temps']
-         );
-         $reservationC->ajouterreservation($reservation);
-         header('Location:profilUser.php');
-     }
-     else
-         $error ="Missing information" ;
-         
-       
- }
-
+ $destinationC=new destinationC();
+ $listedestinations=$destinationC->afficherdestinationsUser($res['id'],$_POST); 
+    
 
 ?>
 <!DOCTYPE html>
@@ -101,7 +70,6 @@ else{
         </div>
     </div>
     <!-- end of preloader -->
-    
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
@@ -204,38 +172,31 @@ else{
                     <!-- Call Me Form -->
                     <form data-toggle="validator" data-focus="false" method="POST">
                         <div class="form-group">
-                            <input type="text" class="form-control-input" id="nom_hotel" name="nom_hotel" required>
+                            <input type="text" class="form-control-input" id="nom_hotel" name="nom_hotel" >
                             <label class="label-control" for="nom_hotel">Nom hotel</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group">
-                            <input type="number" class="form-control-input" id="duree" name="duree" required>
-                            <label class="label-control" for="duree">Duree(mois)</label>
+                            <input type="text" class="form-control-input" id="arrive" name="arrive" >
+                            <label class="label-control" for="arrive">arrive</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group">
-                            <input type="number" class="form-control-input" id="nbr" name="nbr" required>
-                            <label class="label-control" for="nbr">Nombre de personnes</label>
+                            <input type="number" class="form-control-input" id="prix" name="prix" >
+                            <label class="label-control" for="prix">prix</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group">
-                            <input type="date" class="form-control-input" id="date" name="date" required>
-                            <label class="label-control" for="date"></label>
+                            <input type="date" class="form-control-input" id="date_limite" name="date_limite" >
+                            <label class="label-control" for="date_limite"></label>
                             <div class="help-block with-errors"></div>
                         </div>
-                        <div class="form-group">
-                            <input type="time" class="form-control-input" id="temps" name="temps" required>
-                            <label class="label-control" for="temps"></label>
-                            <div class="help-block with-errors"></div>
-                        </div>
+                       
                         
                         
-                        <div class="form-group checkbox white">
-                            <input type="checkbox" id="lterms" value="Agreed-to-Terms" name="lterms" required>I agree with Aria's stated <a class="white" href="privacy-policy.html">Privacy Policy</a> and <a class="white" href="terms-conditions.html">Terms & Conditions</a>
-                            <div class="help-block with-errors"></div>
-                        </div>
+                        
                         <div class="form-group">
-                            <button type="submit" class="form-control-submit-button">SE CONNECTER</button>
+                            <button type="submit" class="form-control-submit-button">RECHERCHER</button>
                         </div>
                         <div class="form-message">
                             <div id="lmsgSubmit" class="h3 text-center hidden"></div>
@@ -253,7 +214,58 @@ else{
     <!-- end of call me -->
    
     
-   
+   <!-- Services -->
+   <div id="services" class="cards-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">DESTINATION</div>
+                    <h2>CONSULTER<br> VOS DESTINATIONS</h2>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+            <div class="row">
+                <div class="col-lg-12">
+                <?php
+               
+				foreach($listedestinations as $destination){
+			?>
+                    <!-- Card -->
+                    <div class="card">
+                        <div class="card-image">
+                            <img class="img-fluid" src="../assets/images/services-1.jpg" alt="alternative">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Voyage a: <?php echo $destination['arrive']; ?></h3>
+                            <p> Date : <?php echo $destination['date_limite']; ?> </p>
+                            <ul class="list-unstyled li-space-lg">
+                                <li class="media">
+                                    <i class="fas fa-square"></i>
+                                    <div class="media-body">Nom Hotel: <?php echo $destination['nom_hotel']; ?> </div>
+                                </li>
+                                <li class="media">
+                                    <i class="fas fa-square"></i>
+                                    <div class="media-body">Nombre de places : <?php echo $destination['place']; ?></div>
+                                </li>
+                            </ul>
+                            <p class="price">Prix :<span><?php echo $destination['prix']; ?></span></p>
+                        </div>
+                        <div class="form-group row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                        <div class="button-container">
+                            <form method="POST" action="ajouterreservationUser.php?dest=<?php echo $destination['id']; ?>&& id=<?php echo $res['id']; ?>">   
+                                <input type="number" name="nbr" id="nbr" placeholder="nombre de personnes" required>     
+                    <input  type="submit" class="btn-solid-reg page-scroll" value="reserver">
+                </form>       
+                </div> <!-- end of button-container -->
+                        </div> 
+                       
+                        </div>
+                        <!-- end of button-container -->
+                    </div>
+                    <!-- end of card -->
+                    <?php
+				}
+			?>
 
 
   

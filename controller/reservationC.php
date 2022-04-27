@@ -3,7 +3,7 @@
 	include_once '../model/reservation.php';
 	class reservationC {
 		function statistiquereservations(){
-			$sql="SELECT r.nom_hotel,sum(prix) as prix FROM ticket t INNER JOIN reservation r ON r.id = t.id_reservation GROUP BY nom_hotel;";
+			$sql="SELECT arrive,sum(prix) as prix FROM destination d INNER JOIN reservation r ON d.id = r.id_destination GROUP BY id_destination;";
 			$db = config::getConnexion();
 			try{
 				$liste = $db->query($sql);
@@ -13,6 +13,20 @@
 				die('Erreur:'. $e->getMeesage());
 			}
 		}
+		function Userreservation($id){
+			$sql="SELECT * FROM Destination d INNER JOIN reservation r ON d.id = r.id_destination where r.id_user=$id;";
+
+			$db = config::getConnexion();
+			try{
+				
+				$liste = $db->query($sql);
+				return $liste;
+			}
+			catch (Exception $e){	
+				die('Erreur:'. $e->getMeesage());
+			}
+				
+			}
 		function afficherreservations(){
 			$sql="SELECT * FROM reservation";
 			$db = config::getConnexion();
@@ -25,15 +39,12 @@
 			}
 		}
 		function supprimerreservation($Idreservation){
-			$sqlcheck="DELETE FROM ticket WHERE id_reservation=:id";
 			$sql="DELETE FROM reservation WHERE id=:id";
 			$db = config::getConnexion();
-			$reqcheck=$db->prepare($sqlcheck);
 			$req=$db->prepare($sql);
-			$reqcheck->bindValue(':id', $Idreservation);
 			$req->bindValue(':id', $Idreservation);
 			try{
-				$reqcheck->execute();
+				
 				$req->execute();
 			}
 			catch(Exception $e){
@@ -41,18 +52,35 @@
 			}
 		}
 		function ajouterreservation($reservation){
-			$sql="INSERT INTO reservation ( id_user, nom_hotel, duree, nbr, date)
-			VALUES (:id_user,:nom_hotel, :duree,:nbr, :dates )";
+			$sqlcheck="SELECT place from destination where id=:id_destination and place>=:nbr";
+			$sql="INSERT INTO reservation ( id_user, id_destination, nbr, date)
+			VALUES (:id_user,:id_destination,:nbr, :dates )";
+			$sqlupdate="UPDATE  destination SET place=place-:nbr where id=:id_destination and place>=:nbr";
 			$db = config::getConnexion();
 			try{
-				$query = $db->prepare($sql);
-				$query->execute([
-					'id_user' => $reservation->getid_user(),
-					'nom_hotel' => $reservation->getnom_hotel(),
-					'duree' => $reservation->getduree(),
-					'nbr' => $reservation->getnbr(),
-					'dates' => $reservation->getdate()
-				]);			
+				$querycheck = $db->prepare($sqlupdate);
+				$querycheck->execute([
+					'id_destination' => $reservation->getid_destination(),
+					'nbr' => $reservation->getnbr()
+				]);	
+				$count=$querycheck->rowCount();
+					if($count>0){
+						$query = $db->prepare($sql);
+						$queryupdate = $db->prepare($sqlupdate);
+						$query->execute([
+							'id_user' => $reservation->getid_user(),
+							'id_destination' => $reservation->getid_destination(),
+							'nbr' => $reservation->getnbr(),
+							'dates' => $reservation->getdate()
+						]);	
+						$queryupdate->execute([
+							'id_destination' => $reservation->getid_destination(),
+							'nbr' => $reservation->getnbr()
+						]);	
+					}
+				
+			
+						
 			}
 			catch (Exception $e){
 				echo 'Erreur: '.$e->getMessage();
@@ -114,16 +142,14 @@
 				$query = $db->prepare(
 					'UPDATE reservation SET 
 						id_user= :id_user, 
-						nom_hotel= :nom_hotel, 
-						duree= :duree, 
+						id_destination= :id_destination, 
 						nbr= :nbr, 
 						date = :dates
 					WHERE id= :id'
 				);
 				$query->execute([
 					'id' => $id,
-					'nom_hotel' => $reservation->getnom_hotel(),
-					'duree' => $reservation->getduree(),
+					'id_destination' => $reservation->getid_destination(),
 					'nbr' => $reservation->getnbr(),
 					'dates' => $reservation->getdate(),
 					'id_user' => $reservation->getid_user()

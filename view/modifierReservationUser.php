@@ -15,30 +15,24 @@
     // create reservation
     $reservation = null;
     $message=null;
-    // create an instance of the controller
     $reservationC = new reservationC();
+    if (isset($_GET['id'])){
+        $reservation = $reservationC->recupererreservation($_GET['id'],'id');
+     }
+    // create an instance of the controller
+    
     if (
-			
-        isset($_POST["nom_hotel"]) &&
-		isset($_POST["duree"]) && 
-        isset($_POST["nbr"]) && 
-        isset($_POST["date"]) &&
-        isset($_POST["temps"])
+        isset($_POST["nbr"])  
     ) {
         if (
-            !empty($_POST["nom_hotel"]) && 
-			!empty($_POST["duree"]) && 
-            !empty($_POST["nbr"]) && 
-            !empty($_POST["date"]) &&
-            !empty($_POST["temps"])
+            !empty($_POST["nbr"]) 
         ) {
             
             $reservation = new Reservation(
 				$res['id'],
-                $_POST['nom_hotel'], 
-				$_POST['duree'],
-                $_POST['nbr'],
-                $_POST['date'] . " " . $_POST['temps']
+                $reservation['id_destination'], 
+                $_POST["nbr"],
+                $reservation['date']
             );
             $reservationC->modifierreservation($reservation,$_GET["id"]);
             header('Location:profilUser.php');
@@ -50,15 +44,7 @@
 
     
 ?>
-<?php 
- 
 
-		if (isset($_GET['id'])){
-			$reservation = $reservationC->recupererreservation($_GET['id'],'id');
-         }
-
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -209,22 +195,10 @@
                     <form data-toggle="validator" data-focus="false" method="POST">
                    
                     
-                    <div class="form-group">
-                    <label class="label-control"  for="nom_hotel">Nom hotel</label>
-                    <br>
-                    <br>
-                            <input type="text"  value="<?php echo $reservation['nom_hotel'];?>" class="form-control-input" id="nom_hotel" name="nom_hotel" required>
-                            <div class="help-block with-errors"></div>   
-                        </div>
+                   
                             
                         
-                        <div class="form-group">
-                        <label class="label-control" for="duree">Duree(mois)</label>
-                        <br>
-                        <br>
-                            <input type="number"  value="<?php echo $reservation['duree'];?>" class="form-control-input" id="duree" name="duree" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
+                        
                         <div class="form-group">
                         <label class="label-control" for="nbr">Nombre de personnes</label>
                         <br>
@@ -232,24 +206,8 @@
                             <input type="number"  value="<?php echo $reservation['nbr'];?>" class="form-control-input" id="nbr" name="nbr" required>
                             <div class="help-block with-errors"></div>
                         </div>
-                        <div class="form-group">
-                        <label class="label-control" for="date">Date</label>
-                        <br>
-                        <br>
-                            <input type="date" value="<?php $date = new DateTime($reservation['date']);
-                                    echo $result = $date->format('Y-m-d');?>" class="form-control-input" id="date" name="date" required>
-                            
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="form-group">
-                        <label class="label-control" for="temps"> Temps </label>
-                        <br>
-                        <br>
-                            <input type="time" value="<?php $date = new DateTime($reservation['date']);
-                                    echo $result = $date->format('H:i:s');?>" class="form-control-input" id="temps" name="temps" required>
-                           
-                            <div class="help-block with-errors"></div>
-                        </div>
+                      
+                        
                         
                         
                         <div class="form-group checkbox white">

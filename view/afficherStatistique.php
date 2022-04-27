@@ -2,10 +2,10 @@
 	include '../Controller/reservationC.php';
 	$reservationC=new reservationC();
 	$liste=$reservationC->statistiquereservations();
-    $hotel="";
+    $arrive="";
     $prix="";
     foreach($liste as $keys){
-        $hotel.=$keys['nom_hotel'].'/';
+        $arrive.=$keys['arrive'].'/';
         $prix.=$keys['prix'].'/';
     }
 ?>
@@ -77,7 +77,7 @@
                                 <div class="card shadow mb-4">
 
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Statistique des hotels</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Statistique des arrives</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-bar">
@@ -130,14 +130,14 @@
   }
   return s.join(dec);
 }
-var hotels="<?php echo $hotel; ?>";
+var arrives="<?php echo $arrive; ?>";
 var prix="<?php echo $prix; ?>";
 // Bar Chart Example
 var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: hotels.split("/"),
+    labels: arrives.split("/"),
     datasets: [{
       label: "Revenue",
       backgroundColor: "#4e73df",

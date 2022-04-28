@@ -39,13 +39,17 @@
 			}
 		}
 		function supprimerreservation($Idreservation){
+			$sqlcheck="UPDATE destination d SET place=place+(SELECT nbr FROM reservation r WHERE r.id=:id) WHERE d.id=(SELECT id_destination FROM reservation r WHERE r.id=:id)";
 			$sql="DELETE FROM reservation WHERE id=:id";
 			$db = config::getConnexion();
+			$reqcheck=$db->prepare($sqlcheck);
 			$req=$db->prepare($sql);
 			$req->bindValue(':id', $Idreservation);
+			$reqcheck->bindValue(':id', $Idreservation);
 			try{
-				
+				$reqcheck->execute();
 				$req->execute();
+				
 			}
 			catch(Exception $e){
 				die('Erreur:'. $e->getMeesage());
@@ -58,7 +62,7 @@
 			$sqlupdate="UPDATE  destination SET place=place-:nbr where id=:id_destination and place>=:nbr";
 			$db = config::getConnexion();
 			try{
-				$querycheck = $db->prepare($sqlupdate);
+				$querycheck = $db->prepare($sqlcheck);
 				$querycheck->execute([
 					'id_destination' => $reservation->getid_destination(),
 					'nbr' => $reservation->getnbr()

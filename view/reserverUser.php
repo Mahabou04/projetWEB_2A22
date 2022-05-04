@@ -244,7 +244,7 @@ else{
                                 </li>
                                 <li class="media">
                                     <i class="fas fa-square"></i>
-                                    <div class="media-body">Nombre de places : <?php echo $destination['place']; ?></div>
+                                    <div class="media-body">Nombre de places disponibles : <?php echo $destination['place']; ?></div>
                                 </li>
                             </ul>
                             <p class="price">Prix :<span><?php echo $destination['prix']; ?></span></p>
@@ -252,7 +252,7 @@ else{
                         <div class="form-group row">
                         <div class="col-sm-6 mb-3 mb-sm-0">
                         <div class="button-container">
-                            <form method="POST" action="ajouterreservationUser.php?dest=<?php echo $destination['id']; ?>&& id=<?php echo $res['id']; ?>">   
+                            <form method="POST" action="ajouterreservationUser.php?arrive=<?php echo $destination['arrive']; ?>&&dest=<?php echo $destination['id']; ?>&& id=<?php echo $res['id']; ?>">   
                                 <input type="number" name="nbr" id="nbr" placeholder="nombre de personnes" required>     
                     <input  type="submit" class="btn-solid-reg page-scroll" value="reserver">
                 </form>       

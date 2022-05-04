@@ -57,9 +57,9 @@
 </li>
  <!-- Nav Item - ticket -->
  <li class="nav-item">
-    <a class="nav-link" href="afficherticket.php">
+    <a class="nav-link" href="afficherDestination.php">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Ticket</span></a>
+        <span>Destination</span></a>
 </li>
  <!-- Nav Item - ticket -->
  <li class="nav-item">

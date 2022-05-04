@@ -35,6 +35,15 @@
                 $reservation['date']
             );
             $reservationC->modifierreservation($reservation,$_GET["id"]);
+            $subject = 'reservation';
+            $to      = $res['email'];
+        $message = 'la modification de votre reservation est reussite';
+        $headers = array(
+        'From' => 'mohamedaziz.jellazi@esprit.com',
+        'Reply-To' => 'mohamedaziz.jellazi@esprit.com',
+        '   X-Mailer' => 'PHP/' . phpversion()
+        );
+        mail($to, $subject, $message, $headers);
             header('Location:profilUser.php');
         }
         else

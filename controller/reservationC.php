@@ -57,8 +57,8 @@
 		}
 		function ajouterreservation($reservation){
 			$sqlcheck="SELECT place from destination where id=:id_destination and place>=:nbr";
-			$sql="INSERT INTO reservation ( id_user, id_destination, nbr, date)
-			VALUES (:id_user,:id_destination,:nbr, :dates )";
+			$sql="INSERT INTO reservation ( id_user, id_destination, nbr, date,payement)
+			VALUES (:id_user,:id_destination,:nbr, :dates,:payement )";
 			$sqlupdate="UPDATE  destination SET place=place-:nbr where id=:id_destination and place>=:nbr";
 			$db = config::getConnexion();
 			try{
@@ -75,7 +75,44 @@
 							'id_user' => $reservation->getid_user(),
 							'id_destination' => $reservation->getid_destination(),
 							'nbr' => $reservation->getnbr(),
-							'dates' => $reservation->getdate()
+							'dates' => $reservation->getdate(),
+							'payement' => "no"
+						]);	
+						$queryupdate->execute([
+							'id_destination' => $reservation->getid_destination(),
+							'nbr' => $reservation->getnbr()
+						]);	
+					}
+				
+			
+						
+			}
+			catch (Exception $e){
+				echo 'Erreur: '.$e->getMessage();
+			}			
+		}
+		function ajouterreservationPay($reservation){
+			$sqlcheck="SELECT place from destination where id=:id_destination and place>=:nbr";
+			$sql="INSERT INTO reservation ( id_user, id_destination, nbr, date,payement)
+			VALUES (:id_user,:id_destination,:nbr, :dates,:payment )";
+			$sqlupdate="UPDATE  destination SET place=place-:nbr where id=:id_destination and place>=:nbr";
+			$db = config::getConnexion();
+			try{
+				$querycheck = $db->prepare($sqlcheck);
+				$querycheck->execute([
+					'id_destination' => $reservation->getid_destination(),
+					'nbr' => $reservation->getnbr()
+				]);	
+				$count=$querycheck->rowCount();
+					if($count>0){
+						$query = $db->prepare($sql);
+						$queryupdate = $db->prepare($sqlupdate);
+						$query->execute([
+							'id_user' => $reservation->getid_user(),
+							'id_destination' => $reservation->getid_destination(),
+							'nbr' => $reservation->getnbr(),
+							'dates' => $reservation->getdate(),
+							'payment' => "yes"
 						]);	
 						$queryupdate->execute([
 							'id_destination' => $reservation->getid_destination(),

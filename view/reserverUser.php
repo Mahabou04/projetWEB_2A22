@@ -254,8 +254,14 @@ else{
                         <div class="button-container">
                             <form method="POST" action="ajouterreservationUser.php?arrive=<?php echo $destination['arrive']; ?>&&dest=<?php echo $destination['id']; ?>&& id=<?php echo $res['id']; ?>">   
                                 <input type="number" name="nbr" id="nbr" placeholder="nombre de personnes" required>     
-                    <input  type="submit" class="btn-solid-reg page-scroll" value="reserver">
-                </form>       
+                                <input  type="submit" class="btn-solid-reg page-scroll" value="reserver sans payement en ligne">
+                </form>  
+                <form method="POST" action="payementEnligne.php?hotel=<?php echo $destination['nom_hotel']; ?>&&arrive=<?php echo $destination['arrive']; ?>&&dest=<?php echo $destination['id']; ?>&&id=<?php echo $res['id']; ?>&&prix=<?php echo $destination['prix']; ?>">   
+                                <input type="number" name="np" id="np" placeholder="nombre de personnes" required>     
+                                <input  type="submit" class="btn-solid-reg page-scroll" value="reserver avec payement en ligne">
+                </form>    
+                
+
                 </div> <!-- end of button-container -->
                         </div> 
                        

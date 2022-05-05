@@ -217,6 +217,7 @@
                                             <th>id_destination</th>
                                             <th>nombre de personne</th>
                                             <th>date</th>
+                                            <th>payement en ligne</th>
                                         </tr>
                                 </thead>
                                     <?php
@@ -228,6 +229,7 @@
 				<td><?php echo $reservation['id_destination']; ?></td>
 				<td><?php echo $reservation['nbr']; ?></td>
 				<td><?php echo $reservation['date']; ?></td>
+                <td><?php echo $reservation['payement']; ?></td>
 				
 			</tr>
 			<?php

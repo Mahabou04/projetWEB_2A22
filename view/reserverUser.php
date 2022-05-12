@@ -99,7 +99,12 @@ else{
                     <a class="nav-link page-scroll" href="reserverUser.php">RESERVER</a>
                 </li>
                
-               
+                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="reclamationUser.php">RECLAMATION</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="articleUser.php">ARTICLE</a>
+                </li>
 
                 
             <span class="nav-item social-icons">

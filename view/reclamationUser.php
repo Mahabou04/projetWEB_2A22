@@ -1,16 +1,53 @@
 <?php 
-include '../controller/reservationC.php';
 session_start();
-
 if(!isset($_SESSION['key'])){
     header('Location:connecterUser.php'); 
 }
 else{
     $session=gzinflate($_SESSION['key']);
     $res=json_decode($session,true);
-    $reservationC=new reservationC();
-    $listereservations=$reservationC->Userreservation($res['id']);
+    
 }
+?>
+<?php 
+ include_once '../Model/reclamation.php';
+ include_once '../Controller/reclamationC.php';
+
+ $error = "";
+
+ // create reclamation
+ $reclamation = null;
+ $message=null;
+ // create an instance of the controller
+ $reclamationC=new reclamationC();
+
+ if (
+  
+    isset($_POST["sujet"]) && 
+    isset($_POST["message"]) 
+) {
+    if (
+       
+        !empty($_POST["sujet"]) && 
+        !empty($_POST["message"]) 
+    ) {
+        
+        $reclamation = new reclamation(
+            $_POST['sujet'],
+            $res['email'],
+            $_POST['message'] 
+        );
+        $reclamationC->ajouterreclamation($reclamation);
+       
+        
+    }
+    else
+        $error ="Missing information" ;
+        
+      
+}
+ $listereclamations=$reclamationC->filtrereclamation($res['email'],'email'); 
+    
 
 ?>
 <!DOCTYPE html>
@@ -58,7 +95,6 @@ else{
         </div>
     </div>
     <!-- end of preloader -->
-    
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
@@ -93,6 +129,7 @@ else{
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href="articleUser.php">ARTICLE</a>
                 </li>
+               
                
 
                 
@@ -136,19 +173,79 @@ else{
     <!-- end of header -->
 
 
-    <!-- Services -->
-    <div id="services" class="cards-2">
+    <div id="reserver" class="form-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="text-container">
+                        <div class="section-title">Reclamation</div>
+                        <h2 class="white">Envoyer une reclamation</h2>
+                        <p class="white">You are just a few steps away from a personalized offer. Just fill in the form and send it to us and we'll get right back with a call to help you decide what service package works.</p>
+                        <ul class="list-unstyled li-space-lg white">
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body">It's very easy just fill in the form so we can call</div>
+                            </li>
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body">During the call we'll require some info about the company</div>
+                            </li>
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body">Don't hesitate to message us for any questions or inquiries</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div> <!-- end of col -->
+                
+                <div class="col-lg-6">
+              
+                    <!-- Call Me Form -->
+                    <form data-toggle="validator" data-focus="false" method="POST">
+                   
+                    <div class="form-group">
+                            <input type="text" class="form-control-input" id="sujet" name="sujet" >
+                            <label class="label-control" for="sujet">sujet</label>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="textarea" class="form-control-input" id="message" name="message" >
+                            <label class="label-control" for="message">Message</label>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="form-control-submit-button">Submit</button>
+                        </div>
+                        <div class="form-message">
+                            <div id="lmsgSubmit" class="h3 text-center hidden"></div>
+                        </div>
+                        <div class="help-block with-errors">
+                    <?php echo $error; ?>
+                        </div>
+                    </form>
+                    <!-- end of call me form -->
+                    
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of form-1 -->
+    <!-- end of call me -->
+   
+    
+   <!-- Services -->
+   <div id="services" class="cards-2">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="section-title">RESERVATION</div>
-                    <h2>CONSULTER<br> VOS RESERVATIONS</h2>
+                    <div class="section-title">reclamation</div>
+                    <h2>CONSULTER<br> VOS RECLAMATIONS</h2>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
                 <div class="col-lg-12">
                 <?php
-				foreach($listereservations as $reservation){
+               
+				foreach($listereclamations as $reclamation){
 			?>
                     <!-- Card -->
                     <div class="card">
@@ -156,60 +253,29 @@ else{
                             <img class="img-fluid" src="../assets/images/services-1.jpg" alt="alternative">
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title">Voyage a: <?php echo $reservation['arrive']; ?></h3>
-                            <p> Date : <?php echo $reservation['date']; ?> </p>
+                            <h3 class="card-title">Sujet: <?php echo $reclamation['sujet']; ?></h3>
+                            <p> date : <?php echo $reclamation['date']; ?> </p>
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
                                     <i class="fas fa-square"></i>
-                                    <div class="media-body">Nom Hotel: <?php echo $reservation['nom_hotel']; ?> </div>
+                                    <div class="media-body">Message: <?php echo $reclamation['message']; ?> </div>
                                 </li>
-                                <li class="media">
-                                    <i class="fas fa-square"></i>
-                                    <div class="media-body">Prix: <?php echo $reservation['prix']; ?> </div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-square"></i>
-                                    <div class="media-body">Nombre de personnes : <?php echo $reservation['nbr']; ?></div>
-                                </li>
-                            </ul>
-                            <!-- <p class="price">Starting at <span>$199</span></p> -->
-                        </div>
-                        <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="button-container">
-                            <a class="btn-solid-reg page-scroll" href="modifierReservationUser.php?id=<?php echo $reservation['id']; ?>">MODIFIER</a>
-                        </div> <!-- end of button-container -->
-                        </div> 
-                        <div class="col-sm-6">
-                        <div class="button-container">
-                            <a class="btn-solid-reg page-scroll" href="supprimerReservationUser.php?id=<?php echo $reservation['id']; ?>">SUPPRIMER</a>
-                        </div> 
-                        </div> 
-                        </div>
-                        <!-- end of button-container -->
+                              
+                                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="reponseUser.php?id_rec=<?php echo $reclamation['id']; ?>&&email=<?php echo $res['email']; ?>">Reponse</a>
+                </li>
+                            
+                </div> 
                     </div>
                     <!-- end of card -->
                     <?php
 				}
 			?>
-             
-
-                
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of cards-2 -->
-    <!-- end of services -->
-    
-   
-    
-   
 
 
   
         
-
+           
 
     
 
@@ -302,7 +368,7 @@ else{
     <script src="../assets/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
     <script src="../assets/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="../assets/js/isotope.pkgd.min.js"></script> <!-- Isotope for filter -->
-    <script src="../assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="../assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that valimessages forms -->
     <script src="../assets/js/scripts.js"></script> <!-- Custom scripts -->
 </body>
 </html>

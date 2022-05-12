@@ -1,14 +1,14 @@
 <?php
 	class Destination{
-		private $arrive=null;
-		private $date_limite=null;
+		private $nom=null;
+		private $prenom=null;
 		private $nom_hotel=null;
 		private $prix=null;
 		private $place=null ;
 		
-		function __construct( $arrive, $date_limite,$prix,$nom_hotel, $place){		
-			$this->arrive=$arrive;
-			$this->date_limite=$date_limite;
+		function __construct( $nom, $prenom,$prix,$nom_hotel, $place){		
+			$this->nom=$nom;
+			$this->prenom=$prenom;
 			$this->prix=$prix;
 			$this->nom_hotel=$nom_hotel;
 			$this->place=$place;
@@ -16,11 +16,11 @@
 			
 		}
 		
-		function getarrive(){
-			return $this->arrive;
+		function getnom(){
+			return $this->nom;
 		}
-		function getdate_limite(){
-			return $this->date_limite;
+		function getprenom(){
+			return $this->prenom;
 		}
 		function getprix(){
 			return $this->prix;
@@ -31,11 +31,11 @@
 			return $this->place;
 		}
 		
-		function setarrive(string $arrive){
-			$this->arrive=$arrive;
+		function setnom(string $nom){
+			$this->nom=$nom;
 		}
-		function setdate_limite(string $date_limite){
-			$this->date_limite=$date_limite;
+		function setprenom(string $prenom){
+			$this->prenom=$prenom;
 		}
 		
 		

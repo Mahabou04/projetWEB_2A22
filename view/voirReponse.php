@@ -1,25 +1,50 @@
 <?php
-	include '../controller/destinationC.php';
-	$destinationC=new destinationC();
-	$listedestinations=$destinationC->afficherdestinations(); 
+	include '../controller/messageC.php';
+	$messageC=new messageC();
+	$listemessages=$messageC->filtremessage($_GET['id_rec'],'id_rec'); 
+    
     if(isset($_POST["recherche"]) && isset($_GET["recherche"]))
     {
         if(!empty($_POST["recherche"]) && !empty($_GET["recherche"]) )
             {
             
                 
-                $listedestinations=$destinationC->filtredestination($_POST["recherche"],$_GET["recherche"]);
-                if(empty($listedestinations)){
-                    $listedestinations=[];  
+                $listemessages=$messageC->filtremessage($_POST["recherche"],$_GET["recherche"]);
+                if(empty($listemessages)){
+                    $listemessages=[];  
                 }
                 
             }
             else
-            $listedestinations=$destinationC->afficherdestinations();
+            $listemessages=$messageC->affichermessages();
                 
               
         
     } 
+    else if(isset($_POST["recherchesujet"]) && isset($_POST["rechercheTemps"]) &&  isset($_GET["recherche"])){
+        if(!empty($_POST["recherchesujet"]) && !empty($_POST["rechercheTemps"]) && isset($_GET["recherche"])){
+            $listemessages=$messageC->filtremessage($_POST["recherchesujet"]. ' ' .$_POST["rechercheTemps"],$_GET["recherche"]);
+            if(empty($listemessages)){
+                $listemessages=[];  
+            }
+        }
+        else if(!empty($_POST["recherchesujet"]) && isset($_GET["recherche"])){
+            $listemessages=$messageC->recupererAvecDateOuTemps($_POST["recherchesujet"],$_GET["recherche"]);
+            if(empty($listemessages)){
+                $listemessages=[];  
+            }
+        }
+        elseif(!empty($_POST["rechercheTemps"]) && isset($_GET["recherche"])){
+            $listemessages=$messageC->recupererAvecDateOuTemps($_POST["rechercheTemps"],'temps');
+            if(empty($listemessages)){
+                $listemessages=[];  
+            } 
+        }
+        else
+        $listemessages=$messageC->affichermessages();
+
+    }
+    
 ?>
 <html lang="en">
 
@@ -63,7 +88,6 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - destination -->
             <li class="nav-item">
                 <a class="nav-link" href="afficherReservation.php" >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -97,6 +121,7 @@
                     <span>Statistique</span></a>
             </li>
 
+
         </ul>
         <!-- End of Sidebar -->
 
@@ -111,10 +136,10 @@
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
-                        
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
+                        
                     </form>
                     <div class="dropdown mb-2">
                                         <button class="btn btn-primary dropdown-toggle" type="button"
@@ -133,37 +158,39 @@
                                         </button>
                                         <div class="dropdown-menu animated--fade-in"
                                             aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "id"; ?>" >id</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "arrive"; ?>" >arrive</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "date_limite"; ?>" >date_limite</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "prix"; ?>" >prix</a> 
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "nom_hotel"; ?>" >nom_hotel</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "place"; ?>" >nombre de place</a> 
+                                            <a class="dropdown-item" href="voirreponse.php?id_rec=<?php echo $_GET['id_rec']; ?>&&recherche=<?php echo "id"; ?>" >id</a>
+                                            <a class="dropdown-item" href="voirreponse.php?id_rec=<?php echo $_GET['id_rec']; ?>&&recherche=<?php echo "email"; ?>" >email</a>
+                                            <a class="dropdown-item" href="voirreponse.php?id_rec=<?php echo $_GET['id_rec']; ?>&&recherche=<?php echo "date"; ?>" >date</a>
                                         </div>
                                     </div>
 
                     <!-- Topbar Search -->
+                    
                     <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search " method='POST'>
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="POST">
                         <div class="input-group">
-                        <?php 
-                            if(isset($_GET['recherche']) && $_GET['recherche']=="date_limite"){
+                            <?php 
+                            if(isset($_GET['recherche']) && $_GET['recherche']=="date"){
                                 echo '<input type="date" class="form-control bg-light border-0 small" 
-                                name="recherche" aria-label="Search" aria-describedby="basic-addon2">';
+                                name="recherchesujet" aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="time" class="form-control bg-light border-0 small" 
+                                name="rechercheTemps" aria-label="Search" aria-describedby="basic-addon2">';
                             }
                             else 
-                            echo ' <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..."
-                            name="recherche" aria-label="Search" aria-describedby="basic-addon2">';
+                            echo '<input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..."
+                               name="recherche" aria-label="Search" aria-describedby="basic-addon2">';
                                 ?>
-                           
-                               <div class="input-group-append">
+                            <div class="input-group-append">
                                 <input class="btn btn-primary" type="submit" value="Rechercher" >
+                                    
                                 
                                
                             </div>
+                            
                         </div>
+                       
                     </form>
-
+                        
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -173,9 +200,9 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
-                         
+</ul>
 
-                      
+                           
                           
                        
 
@@ -190,7 +217,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Liste des destinations</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Liste des messages</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -198,29 +225,23 @@
                                 <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Arrive</th>
-                                            <th>Date_limite</th>
-                                            <th>Prix</th>
-                                            <th>Nom hotel</th>
-                                            <th>Nombre de place</th>
+                                            <th>Email</th>
+                                            
+                                            
+                                            <th>texte</th>
+                                            <th>date</th>
+                                            
                                         </tr>
                                 </thead>
                                     <?php
-				foreach($listedestinations as $destination){
+				foreach($listemessages as $message){
 			?>
 			<tr>
-				<td><?php echo $destination['id']; ?></td>
-				<td><?php echo $destination['arrive']; ?></td>
-                <td><?php echo $destination['date_limite']; ?></td>
-				<td><?php echo $destination['prix']; ?></td>
-                <td><?php echo $destination['nom_hotel']; ?></td>
-                <td><?php echo $destination['place']; ?></td>
-				<td>
-                <a href="modifierdestination.php?id=<?php echo $destination['id']; ?>">Modifier</a>
-				</td>
-				<td>
-					<a href="supprimerdestination.php?id=<?php echo $destination['id']; ?>">Supprimer</a>
-				</td>
+				<td><?php echo $message['id']; ?></td>
+				<td><?php echo $message['email']; ?></td>
+                <td><?php echo $message['texte']; ?></td>
+                <td><?php echo $message['date']; ?></td>
+             
 			</tr>
 			<?php
 				}
@@ -230,9 +251,9 @@
                             </div>
                         </div>
                     </div>
-                    <a href="http://localhost/projetWEB_2A22/view/ajouterdestination.php" class="btn btn-primary ">
-                                    Ajouter destination
-</a>
+                    <a href="ajouterreponseAdmin.php?id_rec=<?php echo $_GET['id_rec']; ?>" class="btn btn-primary ">
+                                    Ajouter message
+            </a>
                 </div>
                 <!-- /.container-fluid -->
                

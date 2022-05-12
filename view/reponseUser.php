@@ -1,16 +1,39 @@
 <?php 
-include '../controller/reservationC.php';
-session_start();
+ include_once '../Model/message.php';
+ include_once '../Controller/messageC.php';
 
-if(!isset($_SESSION['key'])){
-    header('Location:connecterUser.php'); 
+ $error = "";
+
+ // create message
+ $message = null;
+ $message=null;
+ // create an instance of the controller
+ $messageC=new messageC();
+
+ if (
+    isset($_POST["message"]) 
+) {
+    if (
+        !empty($_POST["message"]) 
+    ) {
+        
+        $message = new message(
+            $_GET['id_rec'], 
+            $_POST['message'],
+            $_GET['email'] 
+        );
+        $messageC->ajoutermessage($message);
+       
+        
+    }
+    else
+        $error ="Missing information" ;
+        
+      
 }
-else{
-    $session=gzinflate($_SESSION['key']);
-    $res=json_decode($session,true);
-    $reservationC=new reservationC();
-    $listereservations=$reservationC->Userreservation($res['id']);
-}
+
+ $listemessages=$messageC->filtremessage($_GET['id_rec'],'id_rec'); 
+    
 
 ?>
 <!DOCTYPE html>
@@ -58,7 +81,6 @@ else{
         </div>
     </div>
     <!-- end of preloader -->
-    
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
@@ -78,7 +100,7 @@ else{
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav ml-auto">
                
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link page-scroll" href="deconnexion.php">SE DECONNECTER</a>
                 </li>
                 <li class="nav-item">
@@ -86,13 +108,8 @@ else{
                 </li>
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href="reserverUser.php">RESERVER</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link page-scroll" href="reclamationUser.php">RECLAMATION</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link page-scroll" href="articleUser.php">ARTICLE</a>
-                </li>
+                </li> -->
+               
                
 
                 
@@ -136,80 +153,69 @@ else{
     <!-- end of header -->
 
 
-    <!-- Services -->
-    <div id="services" class="cards-2">
+    
+   
+    
+   <!-- Services -->
+   <div id="services" class="cards-2">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="section-title">RESERVATION</div>
-                    <h2>CONSULTER<br> VOS RESERVATIONS</h2>
+                    <div class="section-title">message</div>
+                    <h2>CONSULTER<br> VOS MESSAGES</h2>
+                    
+                    <a class="nav-link page-scroll" href="reclamationUser.php">Retour au reclamation</a>
+               
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
                 <div class="col-lg-12">
                 <?php
-				foreach($listereservations as $reservation){
+               
+				foreach($listemessages as $message){
 			?>
                     <!-- Card -->
                     <div class="card">
-                        <div class="card-image">
-                            <img class="img-fluid" src="../assets/images/services-1.jpg" alt="alternative">
-                        </div>
+                        
                         <div class="card-body">
-                            <h3 class="card-title">Voyage a: <?php echo $reservation['arrive']; ?></h3>
-                            <p> Date : <?php echo $reservation['date']; ?> </p>
+                            <h3 class="card-title">Email: <?php echo $message['email']; ?></h3>
+                            <p> date : <?php echo $message['date']; ?> </p>
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
                                     <i class="fas fa-square"></i>
-                                    <div class="media-body">Nom Hotel: <?php echo $reservation['nom_hotel']; ?> </div>
+                                    <div class="media-body">Message: <?php echo $message['texte']; ?> </div>
                                 </li>
-                                <li class="media">
-                                    <i class="fas fa-square"></i>
-                                    <div class="media-body">Prix: <?php echo $reservation['prix']; ?> </div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-square"></i>
-                                    <div class="media-body">Nombre de personnes : <?php echo $reservation['nbr']; ?></div>
-                                </li>
-                            </ul>
-                            <!-- <p class="price">Starting at <span>$199</span></p> -->
-                        </div>
-                        <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="button-container">
-                            <a class="btn-solid-reg page-scroll" href="modifierReservationUser.php?id=<?php echo $reservation['id']; ?>">MODIFIER</a>
-                        </div> <!-- end of button-container -->
-                        </div> 
-                        <div class="col-sm-6">
-                        <div class="button-container">
-                            <a class="btn-solid-reg page-scroll" href="supprimerReservationUser.php?id=<?php echo $reservation['id']; ?>">SUPPRIMER</a>
-                        </div> 
-                        </div> 
-                        </div>
-                        <!-- end of button-container -->
+                                
+                             
+                            
+                </div> 
                     </div>
                     <!-- end of card -->
                     <?php
 				}
 			?>
-             
 
-                
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of cards-2 -->
-    <!-- end of services -->
-    
-   
-    
-   
-
-
+                  <!-- Call Me Form -->
+                  <form data-toggle="validator" data-focus="false" method="POST">
+                        <div class="form-group">
+                            <input type="textarea" class="form-control-input" id="message" name="message" >
+                            <label class="label-control" for="message">Message</label>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="form-control-submit-button">Submit</button>
+                        </div>
+                        <div class="form-message">
+                            <div id="lmsgSubmit" class="h3 text-center hidden"></div>
+                        </div>
+                        <div class="help-block with-errors">
+                    <?php echo $error; ?>
+                        </div>
+                    </form>
+                    <!-- end of call me form -->
   
         
-
+           
 
     
 
@@ -302,7 +308,7 @@ else{
     <script src="../assets/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
     <script src="../assets/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="../assets/js/isotope.pkgd.min.js"></script> <!-- Isotope for filter -->
-    <script src="../assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="../assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that valimessages forms -->
     <script src="../assets/js/scripts.js"></script> <!-- Custom scripts -->
 </body>
 </html>

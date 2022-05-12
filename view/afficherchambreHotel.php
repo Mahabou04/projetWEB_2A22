@@ -1,21 +1,21 @@
 <?php
-	include '../controller/destinationC.php';
-	$destinationC=new destinationC();
-	$listedestinations=$destinationC->afficherdestinations(); 
+	include '../controller/chambreC.php';
+	$chambreC=new chambreC();
+	$listechambres=$chambreC->searchchambre($_GET['idh'],'id_hotel',''); 
     if(isset($_POST["recherche"]) && isset($_GET["recherche"]))
     {
         if(!empty($_POST["recherche"]) && !empty($_GET["recherche"]) )
             {
             
                 
-                $listedestinations=$destinationC->filtredestination($_POST["recherche"],$_GET["recherche"]);
-                if(empty($listedestinations)){
-                    $listedestinations=[];  
+                $listechambres=$chambreC->searchchambre($_POST["recherche"],$_GET["recherche"],$_GET['idh']);
+                if(empty($listechambres)){
+                    $listechambres=[];  
                 }
                 
             }
             else
-            $listedestinations=$destinationC->afficherdestinations();
+            $listechambres=$chambreC->searchchambre($_GET['idh'],'id_hotel','');
                 
               
         
@@ -63,15 +63,15 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - destination -->
+            <!-- Nav Item - chambre -->
             <li class="nav-item">
                 <a class="nav-link" href="afficherReservation.php" >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span> Reservation</span></a>
             </li>
-             <!-- Nav Item - destination -->
+             <!-- Nav Item - chambre -->
              <li class="nav-item">
-                <a class="nav-link" >
+                <a class="nav-link" href="afficherDestination.php" >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Destination</span></a>
             </li>
@@ -90,7 +90,8 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span> Article</span></a>
             </li>
-            <!-- Nav Item - destination -->
+            
+            <!-- Nav Item - chambre -->
             <li class="nav-item">
                 <a class="nav-link" href="afficherStatistique.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -133,12 +134,11 @@
                                         </button>
                                         <div class="dropdown-menu animated--fade-in"
                                             aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "id"; ?>" >id</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "arrive"; ?>" >arrive</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "date_limite"; ?>" >date_limite</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "prix"; ?>" >prix</a> 
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "nom_hotel"; ?>" >nom_hotel</a>
-                                            <a class="dropdown-item" href="afficherdestination.php?recherche=<?php echo "place"; ?>" >nombre de place</a> 
+                                            <a class="dropdown-item" href="afficherchambrehotel.php?idh=<?php echo $_GET["idh"]; ?>&&recherche=<?php echo "id"; ?>" >id</a>
+                                            <a class="dropdown-item" href="afficherchambrehotel.php?idh=<?php echo $_GET["idh"]; ?>&&recherche=<?php echo "type"; ?>" >type</a>
+                                            <a class="dropdown-item" href="afficherchambrehotel.php?idh=<?php echo $_GET["idh"]; ?>&&recherche=<?php echo "nbr"; ?>" >nombre de chambres</a>
+                                            <a class="dropdown-item" href="afficherchambrehotel.php?idh=<?php echo $_GET["idh"]; ?>&&recherche=<?php echo "prix"; ?>" >prix</a> 
+                                            
                                         </div>
                                     </div>
 
@@ -147,8 +147,8 @@
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search " method='POST'>
                         <div class="input-group">
                         <?php 
-                            if(isset($_GET['recherche']) && $_GET['recherche']=="date_limite"){
-                                echo '<input type="date" class="form-control bg-light border-0 small" 
+                            if(isset($_GET['recherche']) && $_GET['recherche']!="type" ){
+                                echo '<input type="number" class="form-control bg-light border-0 small" 
                                 name="recherche" aria-label="Search" aria-describedby="basic-addon2">';
                             }
                             else 
@@ -190,7 +190,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Liste des destinations</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Liste des chambres</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -198,29 +198,26 @@
                                 <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Arrive</th>
-                                            <th>Date_limite</th>
-                                            <th>Prix</th>
-                                            <th>Nom hotel</th>
-                                            <th>Nombre de place</th>
+                                            <th>type</th>
+                                            <th>Nombre de chambres</th>
+                                            <th>prix</th>
                                         </tr>
                                 </thead>
                                     <?php
-				foreach($listedestinations as $destination){
+				foreach($listechambres as $chambre){
 			?>
 			<tr>
-				<td><?php echo $destination['id']; ?></td>
-				<td><?php echo $destination['arrive']; ?></td>
-                <td><?php echo $destination['date_limite']; ?></td>
-				<td><?php echo $destination['prix']; ?></td>
-                <td><?php echo $destination['nom_hotel']; ?></td>
-                <td><?php echo $destination['place']; ?></td>
+				<td><?php echo $chambre['id']; ?></td>
+				<td><?php echo $chambre['type']; ?></td>
+                <td><?php echo $chambre['nbr']; ?></td>
+				<td><?php echo $chambre['prix']; ?></td>
 				<td>
-                <a href="modifierdestination.php?id=<?php echo $destination['id']; ?>">Modifier</a>
+                <a href="modifierchambreHotel.php?id=<?php echo $chambre['id']; ?>">Modifier</a>
 				</td>
 				<td>
-					<a href="supprimerdestination.php?id=<?php echo $destination['id']; ?>">Supprimer</a>
+					<a href="supprimerchambreHotel.php?id=<?php echo $chambre['id']; ?>">Supprimer</a>
 				</td>
+                
 			</tr>
 			<?php
 				}
@@ -230,8 +227,8 @@
                             </div>
                         </div>
                     </div>
-                    <a href="http://localhost/projetWEB_2A22/view/ajouterdestination.php" class="btn btn-primary ">
-                                    Ajouter destination
+                    <a href="http://localhost/projetWEB_2A22/view/ajouterchambreHotel.php?id_hotel=<?php echo $_GET['idh']; ?>" class="btn btn-primary ">
+                                    Ajouter chambre
 </a>
                 </div>
                 <!-- /.container-fluid -->

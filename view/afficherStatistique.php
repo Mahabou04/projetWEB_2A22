@@ -61,6 +61,21 @@
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Destination</span></a>
 </li>
+<li class="nav-item">
+                <a class="nav-link" href="afficherHotel.php" >
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span> Hotel</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="afficherReclamationBack.php" >
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span> Reclamation</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="afficherArticleBack.php" >
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span> Article</span></a>
+            </li>
  <!-- Nav Item - ticket -->
  <li class="nav-item">
     <a class="nav-link">

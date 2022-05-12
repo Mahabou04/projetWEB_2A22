@@ -1,16 +1,23 @@
 <?php 
-include '../controller/reservationC.php';
 session_start();
-
 if(!isset($_SESSION['key'])){
     header('Location:connecterUser.php'); 
 }
 else{
     $session=gzinflate($_SESSION['key']);
     $res=json_decode($session,true);
-    $reservationC=new reservationC();
-    $listereservations=$reservationC->Userreservation($res['id']);
+    
 }
+?>
+<?php 
+ include_once '../Model/article.php';
+ include_once '../Controller/articleC.php';
+
+ $error = "";
+
+ $articleC=new articleC();
+ $listearticles=$articleC->afficherarticles(); 
+    
 
 ?>
 <!DOCTYPE html>
@@ -58,7 +65,6 @@ else{
         </div>
     </div>
     <!-- end of preloader -->
-    
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
@@ -93,6 +99,7 @@ else{
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href="articleUser.php">ARTICLE</a>
                 </li>
+               
                
 
                 
@@ -136,80 +143,52 @@ else{
     <!-- end of header -->
 
 
-    <!-- Services -->
-    <div id="services" class="cards-2">
+    
+    
+   <!-- Services -->
+   <div id="services" class="cards-2">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="section-title">RESERVATION</div>
-                    <h2>CONSULTER<br> VOS RESERVATIONS</h2>
+                    <div class="section-title">article</div>
+                    <h2>CONSULTER<br> VOS ARTICLES</h2>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
                 <div class="col-lg-12">
                 <?php
-				foreach($listereservations as $reservation){
+               
+				foreach($listearticles as $article){
 			?>
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="../assets/images/services-1.jpg" alt="alternative">
+                            <img class="img-fluid" src="../assets/images/<?php echo $article['image']; ?>" alt="alternative">
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title">Voyage a: <?php echo $reservation['arrive']; ?></h3>
-                            <p> Date : <?php echo $reservation['date']; ?> </p>
+                          
+                            <p> date : <?php echo $article['date']; ?> </p>
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
                                     <i class="fas fa-square"></i>
-                                    <div class="media-body">Nom Hotel: <?php echo $reservation['nom_hotel']; ?> </div>
+                                    <div class="media-body">texte: <?php echo $article['texte']; ?> </div>
                                 </li>
-                                <li class="media">
-                                    <i class="fas fa-square"></i>
-                                    <div class="media-body">Prix: <?php echo $reservation['prix']; ?> </div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-square"></i>
-                                    <div class="media-body">Nombre de personnes : <?php echo $reservation['nbr']; ?></div>
-                                </li>
-                            </ul>
-                            <!-- <p class="price">Starting at <span>$199</span></p> -->
-                        </div>
-                        <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="button-container">
-                            <a class="btn-solid-reg page-scroll" href="modifierReservationUser.php?id=<?php echo $reservation['id']; ?>">MODIFIER</a>
-                        </div> <!-- end of button-container -->
-                        </div> 
-                        <div class="col-sm-6">
-                        <div class="button-container">
-                            <a class="btn-solid-reg page-scroll" href="supprimerReservationUser.php?id=<?php echo $reservation['id']; ?>">SUPPRIMER</a>
-                        </div> 
-                        </div> 
-                        </div>
-                        <!-- end of button-container -->
+                              
+                                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="commentaireUser.php?id_article=<?php echo $article['id']; ?>&&email=<?php echo $res['email']; ?>">Reponse</a>
+                </li>
+                            
+                </div> 
                     </div>
                     <!-- end of card -->
                     <?php
 				}
 			?>
-             
-
-                
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of cards-2 -->
-    <!-- end of services -->
-    
-   
-    
-   
 
 
   
         
-
+           
 
     
 
@@ -302,7 +281,7 @@ else{
     <script src="../assets/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
     <script src="../assets/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="../assets/js/isotope.pkgd.min.js"></script> <!-- Isotope for filter -->
-    <script src="../assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="../assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that valimessages forms -->
     <script src="../assets/js/scripts.js"></script> <!-- Custom scripts -->
 </body>
 </html>
